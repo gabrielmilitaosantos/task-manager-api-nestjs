@@ -1,16 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
-import {UsersService} from "../users/users.service";
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class TasksService {
   constructor(private usersService: UsersService) {}
 
   create(createTaskDto: CreateTaskDto) {
-    // TODO: for the module B - update the dto with the id: number (no auth yet)
     // Test the connection between two services.
-    // const user = this.usersService.findOne()
+    const user = this.usersService.findOne(createTaskDto.userId);
+
+    if (!user) {
+      throw new NotFoundException('User does not exist');
+    }
     return 'This action adds a new task';
   }
 
